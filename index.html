@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATLAS — Manual de Campo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #080808;
+    --surface:  #111111;
+    --surface2: #181818;
+    --border:   #272727;
+    --border2:  #333333;
+    --text:     #e8e5de;
+    --muted:    #6b6660;
+    --gold:     #c8a84b;
+    --gold-dim: #7a6428;
+    --teal:     #3fcfb4;
+    --green:    #5ec95e;
+    --yellow:   #e8b83c;
+    --red:      #e8453c;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+    padding: 40px 0;
+    scrollbar-width: none;
+  }
+  .sidebar::-webkit-scrollbar { display: none; }
+
+  .sidebar-wordmark {
+    padding: 0 28px 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .wordmark {
+    font-family: 'Syncopate', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 0.12em;
+    color: var(--text);
+    line-height: 1;
+  }
+  .wordmark span { color: var(--gold); }
+  .wordmark-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .nav-section { padding: 0 28px; margin-bottom: 20px; }
+  .nav-section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--gold-dim);
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0 7px 8px;
+    margin-left: -8px;
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.15s;
+    border-left: 2px solid transparent;
+  }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--gold); border-left-color: var(--gold); }
+  .nav-num { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--border2); }
+
+  .main { padding: 64px 80px; max-width: 900px; }
+
+  .cover {
+    padding-bottom: 80px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 80px;
+  }
+  .cover-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .cover-title {
+    font-family: 'Syncopate', sans-serif;
+    font-weight: 700;
+    font-size: 72px;
+    line-height: 0.9;
+    letter-spacing: 0.04em;
+    margin-bottom: 32px;
+  }
+  .cover-title .gold { color: var(--gold); }
+  .cover-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+  .cover-meta { display: flex; gap: 40px; flex-wrap: wrap; }
+  .cover-meta-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--gold-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .cover-meta-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--text);
+  }
+
+  .section { margin-bottom: 80px; scroll-margin-top: 40px; }
+  .section-marker {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-marker::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gold-dim);
+    opacity: 0.4;
+  }
+  .section-title {
+    font-family: 'Syncopate', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    margin-bottom: 24px;
+    line-height: 1.2;
+  }
+  .section-intro {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 32px;
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  .subsection { margin-bottom: 40px; }
+  .subsection-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cmd-grid { display: flex; flex-direction: column; gap: 2px; }
+  .cmd-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 24px;
+    align-items: start;
+    transition: border-color 0.15s;
+  }
+  .cmd-card:hover { border-color: var(--border2); }
+  .cmd-card:first-child { border-top: 2px solid var(--gold-dim); }
+  .cmd-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .cmd-syntax {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .cmd-desc {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .cmd-output {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    line-height: 1.5;
+    margin-top: 8px;
+  }
+  .tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    border: 1px solid var(--gold-dim);
+    padding: 2px 6px;
+    margin-right: 4px;
+    margin-top: 6px;
+  }
+  .tag.teal { color: var(--teal); border-color: var(--teal); opacity: 0.7; }
+  .tag.muted { color: var(--muted); border-color: var(--border2); }
+
+  .signal-grid { display: flex; flex-direction: column; gap: 2px; }
+  .signal-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border2);
+    padding: 20px 24px;
+  }
+  .signal-card.high { border-left-color: var(--red); }
+  .signal-card.normal { border-left-color: var(--gold-dim); }
+  .signal-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .signal-name { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text); font-weight: 700; }
+  .priority-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border: 1px solid;
+  }
+  .priority-badge.high { color: var(--red); border-color: var(--red); }
+  .priority-badge.normal { color: var(--muted); border-color: var(--border2); }
+  .signal-trigger { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  .signal-trigger strong { color: var(--text); font-weight: 500; }
+  .signal-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+
+  .recovery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-bottom: 24px; }
+  .recovery-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid;
+    padding: 20px;
+  }
+  .recovery-block.green { border-top-color: var(--green); }
+  .recovery-block.yellow { border-top-color: var(--yellow); }
+  .recovery-block.red { border-top-color: var(--red); }
+  .recovery-status {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+  }
+  .recovery-block.green .recovery-status { color: var(--green); }
+  .recovery-block.yellow .recovery-status { color: var(--yellow); }
+  .recovery-block.red .recovery-status { color: var(--red); }
+  .recovery-trigger { font-size: 11px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
+  .recovery-action { font-size: 11px; color: var(--text); line-height: 1.5; }
+
+  .app-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+  .app-card { background: var(--surface); border: 1px solid var(--border); padding: 20px; }
+  .app-num { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--gold-dim); margin-bottom: 6px; }
+  .app-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .app-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .app-features { margin-top: 10px; list-style: none; }
+  .app-features li {
+    font-size: 11px;
+    color: var(--muted);
+    padding: 4px 0 4px 14px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .app-features li::before { content: '→'; position: absolute; left: 0; color: var(--gold-dim); font-size: 9px; }
+  .app-features li:last-child { border-bottom: none; }
+
+  code {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    background: var(--surface2);
+    padding: 1px 6px;
+    border: 1px solid var(--border);
+  }
+
+  .tip {
+    background: var(--surface);
+    border-left: 3px solid var(--teal);
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .tip strong { color: var(--teal); font-weight: 600; }
+  .warn {
+    background: var(--surface);
+    border-left: 3px solid var(--yellow);
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .warn strong { color: var(--yellow); font-weight: 600; }
+
+  .flow { background: var(--surface); border: 1px solid var(--border); padding: 24px; margin: 20px 0; }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .flow-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 32px;
+    width: 1px;
+    height: calc(100% + 4px);
+    background: var(--border2);
+  }
+  .flow-num {
+    width: 30px;
+    height: 30px;
+    background: var(--bg);
+    border: 1px solid var(--gold-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .flow-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .flow-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  .data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 16px 0; }
+  .data-table th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border2);
+    background: var(--surface);
+  }
+  .data-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  .data-table tr:hover td { background: var(--surface); }
+  .data-table td:first-child { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--gold); }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  .corner-wrap {
+    position: relative;
+    padding: 24px;
+    border: 1px solid var(--border);
+    margin: 20px 0;
+  }
+  .corner-wrap::before, .corner-wrap::after { content: ''; position: absolute; width: 12px; height: 12px; }
+  .corner-wrap::before { top: -1px; left: -1px; border-top: 2px solid var(--gold); border-left: 2px solid var(--gold); }
+  .corner-wrap::after { bottom: -1px; right: -1px; border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+
+  .focus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .focus-item { background: var(--surface); border: 1px solid var(--border); padding: 14px 16px; }
+  .focus-key { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--gold); margin-bottom: 4px; }
+  .focus-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600; color: var(--text); }
+  .focus-desc { font-size: 10px; color: var(--muted); margin-top: 3px; }
+
+  .schedule-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-bottom: 24px; }
+  .day-card { background: var(--surface); border: 1px solid var(--border); padding: 14px 10px; text-align: center; }
+  .day-name { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--muted); margin-bottom: 8px; }
+  .day-focus { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; color: var(--text); margin-bottom: 4px; }
+  .day-focus.gym { color: var(--gold); }
+  .day-focus.tennis { color: var(--teal); }
+  .day-focus.zone2 { color: var(--green); }
+  .day-focus.rest { color: var(--muted); }
+  .day-time { font-size: 10px; color: var(--muted); }
+
+  p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 16px; }
+  strong { color: var(--text); font-weight: 500; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .cover { animation: fadeUp 0.6s ease both; }
+  .section { animation: fadeUp 0.5s ease both; }
+
+  @media (max-width: 960px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .main { padding: 40px 24px; }
+    .cover-title { font-size: 48px; }
+    .recovery-grid, .focus-grid { grid-template-columns: 1fr; }
+    .app-grid { grid-template-columns: 1fr; }
+    .schedule-grid { grid-template-columns: repeat(3, 1fr); }
+    .cmd-card { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-wordmark">
+      <div class="wordmark">ATL<span>A</span>S</div>
+      <div class="wordmark-sub">Manual de Campo · v0.8.3</div>
+    </div>
+    <nav>
+      <div class="nav-section">
+        <div class="nav-section-label">// Overview</div>
+        <a class="nav-link" href="#intro"><span class="nav-num">01</span> O que é o ATLAS</a>
+        <a class="nav-link" href="#agenda"><span class="nav-num">02</span> Agenda padrão</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">// Interface</div>
+        <a class="nav-link" href="#comandos"><span class="nav-num">03</span> Comandos Telegram</a>
+        <a class="nav-link" href="#linguagem"><span class="nav-num">04</span> Linguagem natural</a>
+        <a class="nav-link" href="#miniapp"><span class="nav-num">05</span> Mini App</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">// Sistema</div>
+        <a class="nav-link" href="#recovery"><span class="nav-num">06</span> Recovery Gate</a>
+        <a class="nav-link" href="#semana"><span class="nav-num">07</span> Planejamento</a>
+        <a class="nav-link" href="#proativos"><span class="nav-num">08</span> Sinais proativos</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">// Integrações</div>
+        <a class="nav-link" href="#calendario"><span class="nav-num">09</span> Google Calendar</a>
+        <a class="nav-link" href="#compromissos"><span class="nav-num">10</span> Compromissos</a>
+        <a class="nav-link" href="#saude"><span class="nav-num">11</span> Saúde holística</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">// Referência</div>
+        <a class="nav-link" href="#focos"><span class="nav-num">12</span> Focos de treino</a>
+        <a class="nav-link" href="#guardrails"><span class="nav-num">13</span> Limites</a>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="main">
+
+    <div class="cover">
+      <div class="cover-label">// MANUAL DE CAMPO · EDIÇÃO 2026</div>
+      <div class="cover-title">ATL<span class="gold">A</span>S<br>COACH</div>
+      <p class="cover-sub">Personal trainer agêntico adaptativo. Captura treinos, aprende padrões, adapta a agenda em tempo real e inicia conversas sob sinais precisos — sem virar bot ruidoso.</p>
+      <div class="cover-meta">
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Versão</div>
+          <div class="cover-meta-value">v0.8.3 HOLISTIC</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Interface principal</div>
+          <div class="cover-meta-value">Telegram</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Banco</div>
+          <div class="cover-meta-value">SQLite local</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Fuso</div>
+          <div class="cover-meta-value">America/Sao_Paulo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 01 -->
+    <section class="section" id="intro">
+      <div class="section-marker">// 01 ──────</div>
+      <h2 class="section-title">O QUE É O ATLAS</h2>
+      <p class="section-intro">Não é um app de academia nem um chatbot genérico. É um sistema agêntico que vive no Telegram, conhece seu histórico, lê sua agenda e adapta o plano de treino à sua realidade de cada dia.</p>
+
+      <div class="subsection">
+        <div class="subsection-title">O que o ATLAS faz automaticamente</div>
+        <div class="cmd-grid">
+          <div class="cmd-card" style="grid-template-columns:1fr;">
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;">
+              <div>
+                <div class="cmd-name" style="color:var(--teal);">Toda manhã, 04:50</div>
+                <div class="cmd-desc">Gera e envia seu plano do dia — sessão de musculação, Zone 2 ou nota de tênis — sem você pedir.</div>
+              </div>
+              <div>
+                <div class="cmd-name" style="color:var(--teal);">A cada 30 minutos</div>
+                <div class="cmd-desc">Avalia 5 sinais (recuperação, faltas, hidratação, agenda, mesociclo) e envia nudge se necessário.</div>
+              </div>
+              <div>
+                <div class="cmd-name" style="color:var(--teal);">A cada 4 horas</div>
+                <div class="cmd-desc">Sincroniza Google Calendar e atualiza as janelas livres para o treino do dia seguinte.</div>
+              </div>
+              <div>
+                <div class="cmd-name" style="color:var(--teal);">Todo domingo, 19:00</div>
+                <div class="cmd-desc">Gera review semanal com métricas de RPE, aderência e recomendações para a próxima semana.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip"><strong>Filosofia anti-ruído:</strong> o ATLAS só fala quando tem algo relevante. Máximo 1 mensagem proativa a cada 8h (exceto alertas críticos de recuperação). Silêncio é sinal de que está tudo bem.</div>
+    </section>
+
+    <!-- 02 -->
+    <section class="section" id="agenda">
+      <div class="section-marker">// 02 ──────</div>
+      <h2 class="section-title">AGENDA PADRÃO</h2>
+      <p class="section-intro">Configurada em <code>data/config.yaml</code>. Serve como base para todos os planos. Pode ser sobreposta por <code>/week</code> ou override pontual via agente.</p>
+
+      <div class="schedule-grid">
+        <div class="day-card">
+          <div class="day-name">SEG</div>
+          <div class="day-focus gym">LOWER</div>
+          <div class="day-time">Musculação</div>
+        </div>
+        <div class="day-card">
+          <div class="day-name">TER</div>
+          <div class="day-focus tennis">TÊNIS</div>
+          <div class="day-time">18:00–20:00</div>
+        </div>
+        <div class="day-card">
+          <div class="day-name">QUA</div>
+          <div class="day-focus gym">UPPER PULL</div>
+          <div class="day-time">Musculação</div>
+        </div>
+        <div class="day-card">
+          <div class="day-name">QUI</div>
+          <div class="day-focus tennis">TÊNIS</div>
+          <div class="day-time">18:00–20:00</div>
+        </div>
+        <div class="day-card">
+          <div class="day-name">SEX</div>
+          <div class="day-focus gym">UPPER PUSH</div>
+          <div class="day-time">Musculação</div>
+        </div>
+        <div class="day-card">
+          <div class="day-name">SÁB</div>
+          <div class="day-focus zone2">ZONE 2</div>
+          <div class="day-time">50 min</div>
+        </div>
+        <div class="day-card">
+          <div class="day-name">DOM</div>
+          <div class="day-focus rest">DESCANSO</div>
+          <div class="day-time">—</div>
+        </div>
+      </div>
+
+      <div class="tip"><strong>Rotação automática:</strong> o planejador exclui os últimos 3 exercícios usados em cada padrão de movimento para garantir variação. Você nunca vai repetir o mesmo agachamento três semanas seguidas.</div>
+    </section>
+
+    <!-- 03 -->
+    <section class="section" id="comandos">
+      <div class="section-marker">// 03 ──────</div>
+      <h2 class="section-title">COMANDOS TELEGRAM</h2>
+      <p class="section-intro">Todos os comandos são digitados diretamente no chat do Telegram. O ATLAS aceita somente o seu chat_id — qualquer outra conta é silenciada automaticamente.</p>
+
+      <div class="subsection">
+        <div class="subsection-title">Treino</div>
+        <div class="cmd-grid">
+          <div class="cmd-card">
+            <div class="cmd-left">
+              <div class="cmd-name">/plan</div>
+              <div class="cmd-syntax">/plan<br>/plan lower<br>/plan upper_pull<br>/plan zone2</div>
+            </div>
+            <div class="cmd-right">
+              <div class="cmd-desc">Gera o plano do dia. Sem argumento, usa o foco configurado para o dia da semana. Com argumento, força um foco específico. O Recovery Gate é aplicado automaticamente — se você estiver vermelho, o treino é substituído por prehab + Zone 2.</div>
+              <div class="cmd-output">→ Plano formatado com exercícios, séries, reps e alvos de RPE</div>
+              <span class="tag">obrigatório antes do treino</span>
+            </div>
+          </div>
+
+          <div class="cmd-card">
+            <div class="cmd-left">
+              <div class="cmd-name">/log</div>
+              <div class="cmd-syntax">/log 3x5 agachamento<br>110kg, 2 RIR, RPE 8<br><br>ou mensagem de voz</div>
+            </div>
+            <div class="cmd-right">
+              <div class="cmd-desc">Registra o treino feito. Aceita texto livre ou mensagem de voz (transcrita via Whisper). O parser extrai exercícios, séries, cargas, RIR e RPE automaticamente. Se não conseguir parsear, pede correção.</div>
+              <div class="cmd-output">→ Feedback do coach + sessão salva no banco</div>
+              <span class="tag">principal forma de logging</span>
+              <span class="tag teal">aceita voz</span>
+            </div>
+          </div>
+
+          <div class="cmd-card">
+            <div class="cmd-left">
+              <div class="cmd-name">/tennis</div>
+              <div class="cmd-syntax">/tennis 90 7</div>
+            </div>
+            <div class="cmd-right">
+              <div class="cmd-desc">Registra sessão de tênis. Primeiro argumento: duração em minutos. Segundo: intensidade de 1 a 10. O sistema considera o tênis no cálculo de recuperação — sessão intensa + treino lower no dia seguinte pode ativar YELLOW.</div>
+              <div class="cmd-output">→ "Tênis registrado: 90min, intensidade 7/10"</div>
+            </div>
+          </div>
+
+          <div class="cmd-card">
+            <div class="cmd-left">
+              <div class="cmd-name">/status</div>
+              <div class="cmd-syntax">/status</div>
+            </div>
+            <div class="cmd-right">
+              <div class="cmd-desc">Resumo da semana até agora: treinos concluídos, RPE médio, sessões de tênis. Útil para uma visão rápida antes de decidir sobre o próximo treino.</div>
+              <div class="cmd-output">→ Métricas da semana formatadas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Contexto diário</div>
+        <div class="cmd-grid">
+          <div class="cmd-card">
+            <div class="cmd-left">
+              <div class="cmd-name">/sleep</div>
+              <div class="cmd-syntax">/sleep 7.5<br>/sleep 6</div>
+            </div>
+            <div class="cmd-right">
+              <div class="cmd-desc">Registra horas de sono da noite anterior. Aceita decimal. Sono é o fator mais pesado no cálculo de recuperação (45% do readiness score). Abaixo de 6h ativa YELLOW; abaixo de 5h ativa RED.</div>
+              <span class="tag">impacta recovery gate</span>
+            </div>
+          </div>
+
+          <div class="cmd-card">
+            <div class="cmd-left">
+              <div class="cmd-name">/energy</div>
+              <div class="cmd-syntax">/energy 7<br>/energy 4</div>
+            </div>
+            <div class="cmd-right">
+              <div class="cmd-desc">Registra energia subjetiva de 1 a 10. Junto com sono, determina se o treino deve ser mantido, adaptado ou substituído. Energia ≤4 por 2+ dias consecutivos ativa YELLOW; 3+ dias ativa RED.</div>
+              <span class="tag">impacta recovery gate</span>
+            </div>
+          </div>
+
+          <div class="cmd-card">
+            <div class="cmd-left">
+              <div class="cmd-name">/today</div>
+              <div class="cmd-syntax">/today</div>
+            </div>
+            <div class="cmd-right">
+              <div class="cmd-desc">Exibe o contexto diário registrado até agora: sono, energia, notas. Útil para confirmar que o log foi salvo corretamente antes de gerar o plano.</div>
+              <div class="cmd-output">→ Resumo do dia: sono, energia, hydration, mood</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Planejamento e controle</div>
+        <div class="cmd-grid">
+          <div class="cmd-card">
+            <div class="cmd-left">
+              <div class="cmd-name">/week</div>
+              <div class="cmd-syntax">/week<br>/week tênis ter/qui,<br>lower seg/qua</div>
+            </div>
+            <div class="cmd-right">
+              <div class="cmd-desc">Sem argumento: mostra os próximos 7 dias. Com texto em linguagem natural: o LLM gera uma proposta de semana respeitando seu pedido, mesociclo e recuperação. Confirmação interativa via botões inline.</div>
+              <div class="cmd-output">→ Proposta com botões: ✅ Confirmar / ✏️ Ajustar / ❌ Cancelar</div>
+              <span class="tag">fluxo interativo</span>
+            </div>
+          </div>
+
+          <div class="cmd-card">
+            <div class="cmd-left">
+              <div class="cmd-name">/commitments</div>
+              <div class="cmd-syntax">/commitments<br>/commitments done<br>/commitments dropped<br>/commitments all</div>
+            </div>
+            <div class="cmd-right">
+              <div class="cmd-desc">Lista compromissos rastreados entre sessões. O ATLAS cria compromissos automaticamente quando você declara uma intenção no chat. Default: abertos.</div>
+              <div class="cmd-output">→ "• #3 testar 100kg agachamento (até 15/05)"</div>
+            </div>
+          </div>
+
+          <div class="cmd-card">
+            <div class="cmd-left">
+              <div class="cmd-name">/quiet</div>
+              <div class="cmd-syntax">/quiet<br>/quiet 2h<br>/quiet 3d<br>/quiet 30m</div>
+            </div>
+            <div class="cmd-right">
+              <div class="cmd-desc">Suspende todos os sinais proativos por um período. Default: 24h. Aceita Nh (horas), Nd (dias), Nm (minutos). Alertas críticos de recuperação RED ainda podem passar.</div>
+              <div class="cmd-output">→ "Proativos silenciados até DD/MM HH:MM"</div>
+              <span class="tag">alertas RED ainda passam</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Utilitários</div>
+        <div class="cmd-grid">
+          <div class="cmd-card">
+            <div class="cmd-left">
+              <div class="cmd-name">/start</div>
+              <div class="cmd-syntax">/start</div>
+            </div>
+            <div class="cmd-right">
+              <div class="cmd-desc">Apresentação: fase do mesociclo, semana atual, próxima sessão.</div>
+            </div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-left">
+              <div class="cmd-name">/help</div>
+              <div class="cmd-syntax">/help</div>
+            </div>
+            <div class="cmd-right">
+              <div class="cmd-desc">Lista todos os comandos disponíveis com descrição resumida.</div>
+            </div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-left">
+              <div class="cmd-name">/app</div>
+              <div class="cmd-syntax">/app</div>
+            </div>
+            <div class="cmd-right">
+              <div class="cmd-desc">Abre o Mini App (interface web dentro do Telegram) com dashboard, sessão ao vivo, histórico, progresso e chat.</div>
+              <span class="tag teal">abre webapp</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 -->
+    <section class="section" id="linguagem">
+      <div class="section-marker">// 04 ──────</div>
+      <h2 class="section-title">LINGUAGEM NATURAL E VOZ</h2>
+      <p class="section-intro">Além dos comandos, o ATLAS entende mensagens em texto livre e áudio. Você pode escrever ou falar como falaria com um treinador de verdade.</p>
+
+      <div class="subsection">
+        <div class="subsection-title">Detecção automática de treino</div>
+        <p>Qualquer mensagem contendo palavras como <code>fiz</code>, <code>treinei</code>, <code>rpe</code>, <code>série</code>, <code>kg</code>, <code>reps</code> ou <code>sets</code> é automaticamente tratada como log de treino — sem precisar digitar <code>/log</code>.</p>
+        <div class="corner-wrap">
+          <div class="cmd-name" style="color:var(--teal);margin-bottom:12px;">Exemplos que funcionam</div>
+          <div class="cmd-output" style="margin-bottom:8px;">"3x5 agachamento com barra 110kg, 2 reps em reserva, RPE 8"</div>
+          <div class="cmd-output" style="margin-bottom:8px;">"fiz leg press 4 séries 200kg, deadlift romeno 3x10 60kg"</div>
+          <div class="cmd-output">"treinei upper pull hoje: puxada alta 4x8, remada máquina 3x12"</div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Mensagem de voz</div>
+        <p>Envie um áudio diretamente no chat. O ATLAS transcreve via Whisper, exibe a transcrição e processa como texto. Ideal para logar treinos logo ao sair da academia.</p>
+        <div class="tip"><strong>Dica:</strong> Fale o treino imediatamente após terminar: "Agachamento com barra, 3 séries de 5, 110 quilos, 2 reps em reserva, RPE 8. Leg press, 4 séries..." — o ATLAS captura tudo.</div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Conversa com o agente</div>
+        <p>Qualquer mensagem que não bata com os padrões de log vai para o agente de coaching, que tem acesso a todo o seu histórico, plano, recovery e compromissos. Use para:</p>
+        <div class="flow">
+          <div class="flow-step">
+            <div class="flow-num">→</div>
+            <div class="flow-content">
+              <div class="flow-title">Registrar dados de saúde</div>
+              <div class="flow-desc">"almocei frango com batata, uns 600 kcal" · "bebi 1.5L de água hoje" · "humor hoje 6, stress alto por causa da live"</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">→</div>
+            <div class="flow-content">
+              <div class="flow-title">Consultar histórico</div>
+              <div class="flow-desc">"quanto agachei na última semana de lower?" · "qual meu RPE médio em upper pull esse mês?"</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">→</div>
+            <div class="flow-content">
+              <div class="flow-title">Declarar intenções (cria compromisso)</div>
+              <div class="flow-desc">"vou testar 100kg no agachamento na quinta" → ATLAS cria compromisso e acompanha</div>
+            </div>
+          </div>
+          <div class="flow-step" style="margin-bottom:0">
+            <div class="flow-num">→</div>
+            <div class="flow-content">
+              <div class="flow-title">Pedir adaptações</div>
+              <div class="flow-desc">"tenho 30 minutos hoje, o que faço?" · "joelho doendo, tira agachamento do lower de amanhã"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 -->
+    <section class="section" id="miniapp">
+      <div class="section-marker">// 05 ──────</div>
+      <h2 class="section-title">MINI APP</h2>
+      <p class="section-intro">Interface web acessível via <code>/app</code> no Telegram. Funciona como painel visual: dashboard, sessão ao vivo, histórico e progresso. Complementa o chat — não substitui.</p>
+
+      <div class="app-grid">
+        <div class="app-card">
+          <div class="app-num">// 01 OP</div>
+          <div class="app-name">Home</div>
+          <div class="app-desc">Dashboard principal com status do dia.</div>
+          <ul class="app-features">
+            <li>Badge de Recovery (GREEN / YELLOW / RED)</li>
+            <li>Fase e semana do mesociclo</li>
+            <li>Próxima sessão planejada</li>
+            <li>Botão de iniciar treino</li>
+            <li>Resumo da semana: sessões e RPE médio</li>
+          </ul>
+        </div>
+        <div class="app-card">
+          <div class="app-num">// 02 EX</div>
+          <div class="app-name">Workout</div>
+          <div class="app-desc">Sessão ao vivo com logging por série.</div>
+          <ul class="app-features">
+            <li>Exibe plano do dia com exercícios</li>
+            <li>Formulário por série: reps, carga, RIR</li>
+            <li>Timer integrado</li>
+            <li>Escala de RPE final</li>
+            <li>Botão de conclusão da sessão</li>
+          </ul>
+        </div>
+        <div class="app-card">
+          <div class="app-num">// 03 HIST</div>
+          <div class="app-name">History</div>
+          <div class="app-desc">Arquivo de sessões passadas.</div>
+          <ul class="app-features">
+            <li>Filtro por foco (lower, upper, etc.)</li>
+            <li>Detalhe completo de cada sessão</li>
+            <li>Editar RPE, notas e séries</li>
+            <li>Deletar sessão</li>
+          </ul>
+        </div>
+        <div class="app-card">
+          <div class="app-num">// 04 PROG</div>
+          <div class="app-name">Progress</div>
+          <div class="app-desc">Tendências dos últimos 30 dias.</div>
+          <ul class="app-features">
+            <li>Gráfico: sessões por semana</li>
+            <li>Linha: RPE médio ao longo do tempo</li>
+            <li>Breakdown por foco de treino</li>
+          </ul>
+        </div>
+        <div class="app-card">
+          <div class="app-num">// 05 CTX</div>
+          <div class="app-name">Today</div>
+          <div class="app-desc">Registro de contexto diário via interface.</div>
+          <ul class="app-features">
+            <li>Campo de horas de sono</li>
+            <li>Slider de energia 1–10</li>
+            <li>Campo de notas livres</li>
+            <li>Histórico dos últimos dias</li>
+          </ul>
+        </div>
+        <div class="app-card">
+          <div class="app-num">// 06 WEEK</div>
+          <div class="app-name">Week</div>
+          <div class="app-desc">Visão e edição do plano semanal.</div>
+          <ul class="app-features">
+            <li>Calendário dos próximos 7 dias</li>
+            <li>Botão de proposta via LLM</li>
+            <li>Editor de ajuste em texto livre</li>
+            <li>Confirmar / Descartar</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tip"><strong>Autenticação:</strong> o Mini App usa o token do Telegram automaticamente. Nenhum login separado necessário.</div>
+    </section>
+
+    <!-- 06 -->
+    <section class="section" id="recovery">
+      <div class="section-marker">// 06 ──────</div>
+      <h2 class="section-title">RECOVERY GATE</h2>
+      <p class="section-intro">Aplicado automaticamente sempre que um plano é gerado. Avalia os últimos 7 dias e decide se o treino deve ser mantido, reduzido ou substituído. Não pode ser desabilitado.</p>
+
+      <div class="recovery-grid">
+        <div class="recovery-block green">
+          <div class="recovery-status">● GREEN</div>
+          <div class="recovery-trigger">Sem sinais de fadiga detectados nos últimos 7 dias</div>
+          <div class="recovery-action">Plano executado integralmente. Sem mudanças.</div>
+        </div>
+        <div class="recovery-block yellow">
+          <div class="recovery-status">◐ YELLOW</div>
+          <div class="recovery-trigger">Sono &lt; 6h em média<br><strong>OU</strong> energia ≤4 por 2+ dias<br><strong>OU</strong> RPE acumulado alto<br><strong>OU</strong> tênis intenso + lower no dia seguinte</div>
+          <div class="recovery-action">Plano reduzido: −1 série por exercício principal, +1 RIR nos sets restantes.</div>
+        </div>
+        <div class="recovery-block red">
+          <div class="recovery-status">● RED</div>
+          <div class="recovery-trigger">Sono &lt; 5h em média<br><strong>OU</strong> energia ≤4 por 3+ dias consecutivos</div>
+          <div class="recovery-action">Treino pesado cancelado. Substituído por prehab + Zone 2 de 30min. Sinal proativo de alta prioridade enviado.</div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Readiness Score — pesos dos fatores</div>
+        <table class="data-table">
+          <thead>
+            <tr><th>Fator</th><th>Peso</th><th>Como alimentar</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Sono (horas)</td><td>45%</td><td><code>/sleep</code> toda manhã</td></tr>
+            <tr><td>Energia subjetiva</td><td>30%</td><td><code>/energy</code> toda manhã</td></tr>
+            <tr><td>RPE acumulado</td><td>15%</td><td>Automático via logs de treino</td></tr>
+            <tr><td>Streak contínua</td><td>10%</td><td>Automático (dias consecutivos sem descanso)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn"><strong>Importante:</strong> use <code>/sleep</code> e <code>/energy</code> todos os dias, de preferência pela manhã antes de gerar o plano. Sem dados, o sistema assume GREEN e planeja normalmente.</div>
+    </section>
+
+    <!-- 07 -->
+    <section class="section" id="semana">
+      <div class="section-marker">// 07 ──────</div>
+      <h2 class="section-title">PLANEJAMENTO SEMANAL</h2>
+      <p class="section-intro">Use <code>/week</code> com uma instrução em linguagem natural para propor uma semana customizada. O LLM respeita seu pedido, o mesociclo atual e as regras de recuperação (48h entre mesmo foco).</p>
+
+      <div class="subsection">
+        <div class="subsection-title">Fluxo de confirmação</div>
+        <div class="flow">
+          <div class="flow-step">
+            <div class="flow-num">01</div>
+            <div class="flow-content">
+              <div class="flow-title">Você envia o pedido</div>
+              <div class="flow-desc"><code>/week tênis ter/qui/sáb, lower seg/qua, viagem sex-dom</code></div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">02</div>
+            <div class="flow-content">
+              <div class="flow-title">ATLAS gera a proposta</div>
+              <div class="flow-desc">LLM cria plano de 7 dias respeitando rotação de 48h entre mesmo foco, mesociclo e recuperação. Exibe preview formatado.</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">03</div>
+            <div class="flow-content">
+              <div class="flow-title">Você escolhe</div>
+              <div class="flow-desc"><strong>✅ Confirmar</strong> → persiste no banco · <strong>✏️ Ajustar</strong> → escreva a mudança e o ciclo recomeça · <strong>❌ Cancelar</strong> → nada salvo</div>
+            </div>
+          </div>
+          <div class="flow-step" style="margin-bottom:0">
+            <div class="flow-num">04</div>
+            <div class="flow-content">
+              <div class="flow-title">Plano confirmado vira base</div>
+              <div class="flow-desc">O plano das 04:50 já reflete as mudanças. Overrides pontuais podem ser feitos a qualquer momento pelo agente.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip"><strong>Focos válidos para /week:</strong> lower, upper_pull, upper_push, full, push_pull, conditioning, mobility, zone2, tennis, rest — em qualquer combinação, escrita em português natural.</div>
+    </section>
+
+    <!-- 08 -->
+    <section class="section" id="proativos">
+      <div class="section-marker">// 08 ──────</div>
+      <h2 class="section-title">SINAIS PROATIVOS</h2>
+      <p class="section-intro">O ATLAS avalia 5 sinais a cada 30 minutos. Anti-ruído rígido: dedup por ocorrência, máximo 1 mensagem normal por 8h, silêncio das 22:00 às 06:00 (exceto prioridade alta).</p>
+
+      <div class="signal-grid">
+        <div class="signal-card high">
+          <div class="signal-header">
+            <div class="signal-name">recovery_red_before_gym</div>
+            <div class="priority-badge high">ALTA</div>
+          </div>
+          <div class="signal-trigger"><strong>Dispara quando:</strong> Recovery = RED e amanhã tem sessão de musculação planejada</div>
+          <div class="signal-trigger"><strong>Quebra o silêncio noturno:</strong> sim — único sinal que passa de 22:00 às 06:00</div>
+          <div class="signal-trigger">Coach reframeando como observação ("sua recuperação está crítica...") + botões de ação inline</div>
+          <div class="signal-actions">
+            <span class="tag">reduzir volume</span>
+            <span class="tag">trocar para zone2</span>
+            <span class="tag">manter como está</span>
+          </div>
+        </div>
+
+        <div class="signal-card normal">
+          <div class="signal-header">
+            <div class="signal-name">missed_session_2d</div>
+            <div class="priority-badge normal">NORMAL</div>
+          </div>
+          <div class="signal-trigger"><strong>Dispara quando:</strong> ≥2 sessões de musculação planejadas nos últimos 2 dias estão sem <code>completed=1</code></div>
+          <div class="signal-trigger">Nudge sobre as faltas com sugestões de reorganização da semana</div>
+          <div class="signal-actions">
+            <span class="tag">reorganizar a semana</span>
+            <span class="tag">manter foco hoje</span>
+          </div>
+        </div>
+
+        <div class="signal-card normal">
+          <div class="signal-header">
+            <div class="signal-name">mesocycle_deload_start</div>
+            <div class="priority-badge normal">NORMAL</div>
+          </div>
+          <div class="signal-trigger"><strong>Dispara quando:</strong> domingo + semana atual = última semana do mesociclo</div>
+          <div class="signal-trigger">Aviso de início de deload semana que vem, com opção de estender a fase</div>
+          <div class="signal-actions">
+            <span class="tag">confirmar deload</span>
+            <span class="tag">estender +1 semana</span>
+          </div>
+        </div>
+
+        <div class="signal-card normal">
+          <div class="signal-header">
+            <div class="signal-name">hydration_low_evening</div>
+            <div class="priority-badge normal">NORMAL</div>
+          </div>
+          <div class="signal-trigger"><strong>Dispara quando:</strong> entre 19:00 e 21:00 BRT + água registrada no dia &lt; 1.500ml</div>
+          <div class="signal-trigger">Nudge sutil de hidratação. Se você não registrou nada, assume &lt; 1.500ml e dispara mesmo assim</div>
+          <div class="signal-actions">
+            <span class="tag">registrar mais água</span>
+          </div>
+        </div>
+
+        <div class="signal-card normal">
+          <div class="signal-header">
+            <div class="signal-name">calendar_conflict_tomorrow</div>
+            <div class="priority-badge normal">NORMAL</div>
+          </div>
+          <div class="signal-trigger"><strong>Dispara quando:</strong> amanhã tem musculação planejada mas a maior janela livre na agenda (Google Calendar) é menor que a duração necessária do treino</div>
+          <div class="signal-trigger">Requer Google Calendar configurado com token OAuth ativo</div>
+          <div class="signal-actions">
+            <span class="tag">mover para outro dia</span>
+            <span class="tag">encurtar para 30min</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip"><strong>Dedup:</strong> cada sinal dispara no máximo uma vez por ocorrência. Use <code>/quiet</code> se precisar de silêncio temporário sem desligar os alertas críticos.</div>
+    </section>
+
+    <!-- 09 -->
+    <section class="section" id="calendario">
+      <div class="section-marker">// 09 ──────</div>
+      <h2 class="section-title">GOOGLE CALENDAR</h2>
+      <p class="section-intro">Integração read-only com seu Google Calendar. O ATLAS lê eventos dos próximos 7 dias, encontra janelas livres para treino e detecta conflitos antes que eles aconteçam.</p>
+
+      <div class="subsection">
+        <div class="subsection-title">Janelas monitoradas</div>
+        <table class="data-table">
+          <thead><tr><th>Janela</th><th>Horário</th><th>Uso típico</th></tr></thead>
+          <tbody>
+            <tr><td>Manhã</td><td>06:00 – 09:00 BRT</td><td>Treino pré-expediente</td></tr>
+            <tr><td>Tarde/Noite</td><td>17:00 – 21:00 BRT</td><td>Treino pós-expediente (preferencial)</td></tr>
+          </tbody>
+        </table>
+        <p>Eventos marcados como "não ocupado" (transparentes) no Google são ignorados. Só eventos <strong>busy</strong> clipam as janelas.</p>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">O que o ATLAS faz com a agenda</div>
+        <div class="cmd-grid">
+          <div class="cmd-card" style="grid-template-columns:1fr;">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+              <div>
+                <div class="cmd-name" style="color:var(--teal);font-size:11px;">State brief</div>
+                <div class="cmd-desc" style="font-size:12px;">Se amanhã for dia de gym, o brief do sistema exibe "Janela amanhã: 17:00–19:30" — o agente já sabe antes de você perguntar.</div>
+              </div>
+              <div>
+                <div class="cmd-name" style="color:var(--teal);font-size:11px;">Sinal proativo</div>
+                <div class="cmd-desc" style="font-size:12px;">Se a janela disponível for menor que a duração planejada, dispara <code>calendar_conflict_tomorrow</code> com sugestões de ação.</div>
+              </div>
+              <div>
+                <div class="cmd-name" style="color:var(--teal);font-size:11px;">Ferramenta do agente</div>
+                <div class="cmd-desc" style="font-size:12px;">"Qual a melhor janela para treinar amanhã?" — agente usa <code>next_workout_window</code> e responde com horário exato.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip"><strong>Token salvo em:</strong> <code>data/google_token.json</code> (gitignored). Auto-renova. Se invalidar (restauração de backup, revogação), rode: <code>uv run python scripts/calendar_auth.py</code></div>
+    </section>
+
+    <!-- 10 -->
+    <section class="section" id="compromissos">
+      <div class="section-marker">// 10 ──────</div>
+      <h2 class="section-title">COMPROMISSOS</h2>
+      <p class="section-intro">Intenções declaradas no chat que o ATLAS rastreia entre sessões. Útil para acompanhar metas de carga, testes de performance e objetivos com prazo.</p>
+
+      <div class="subsection">
+        <div class="subsection-title">Criação automática</div>
+        <p>O agente cria compromisso automaticamente ao detectar uma declaração de intenção:</p>
+        <div class="corner-wrap">
+          <div class="cmd-output" style="margin-bottom:8px;">"vou testar 100kg no agachamento na quinta" → <em>testar 100kg agachamento, até qui 09/05</em></div>
+          <div class="cmd-output" style="margin-bottom:8px;">"quero fechar 4 treinos essa semana" → <em>4 treinos na semana</em></div>
+          <div class="cmd-output">"avaliar volume de isquios em 2 semanas" → <em>data calculada automaticamente</em></div>
+        </div>
+        <p style="margin-top:16px;">Para criar explicitamente: "cria um compromisso: resolver tendinite até junho".</p>
+        <p>Para resolver: "resolve compromisso #3" ou "descarta o compromisso do agachamento".</p>
+      </div>
+
+      <p>Compromissos abertos aparecem no state brief do sistema — o agente os vê em toda conversa e pode perguntar sobre eles proativamente conforme a data de vencimento se aproxima.</p>
+    </section>
+
+    <!-- 11 -->
+    <section class="section" id="saude">
+      <div class="section-marker">// 11 ──────</div>
+      <h2 class="section-title">SAÚDE HOLÍSTICA</h2>
+      <p class="section-intro">Além de treino, o ATLAS captura sono, humor, stress, nutrição e hidratação — tudo via chat, zero formulários.</p>
+
+      <div class="subsection">
+        <div class="subsection-title">O que registrar e como</div>
+        <table class="data-table">
+          <thead><tr><th>Dado</th><th>Como registrar</th><th>Impacto</th></tr></thead>
+          <tbody>
+            <tr><td>Sono (horas)</td><td><code>/sleep 7.5</code> ou "dormi 7 horas"</td><td>Recovery Gate (45% do score)</td></tr>
+            <tr><td>Qualidade do sono</td><td>"sono de 7h mas qualidade 6" (agente captura)</td><td>Health snapshot</td></tr>
+            <tr><td>Energia 1–10</td><td><code>/energy 7</code> ou "energia hoje 7"</td><td>Recovery Gate (30% do score)</td></tr>
+            <tr><td>Humor 1–10</td><td>"humor hoje 8, stress baixo"</td><td>Tendências de saúde</td></tr>
+            <tr><td>Hidratação</td><td>"bebi 500ml" (acumula no dia)</td><td>Sinal hydration_low_evening</td></tr>
+            <tr><td>Refeição</td><td>"almocei frango com batata, ~600 kcal"</td><td>Macros estimados por IA</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Health snapshot</div>
+        <p>Peça ao agente: "como estou nos últimos 7 dias?" — ele retorna médias de sono, humor, água e calorias, mais as refeições recentes. Esse snapshot também aparece automaticamente no state brief de cada conversa.</p>
+      </div>
+
+      <div class="tip"><strong>Macros estimados:</strong> se você informar a refeição sem números, o ATLAS estima via Claude Haiku (±30% de precisão). Suficiente para tendências. Para precisão, inclua os dados: "frango 200g, batata 150g, 480 kcal, 45g proteína".</div>
+    </section>
+
+    <!-- 12 -->
+    <section class="section" id="focos">
+      <div class="section-marker">// 12 ──────</div>
+      <h2 class="section-title">FOCOS DE TREINO</h2>
+      <p class="section-intro">Valores válidos usados em comandos, planejamento e overrides. Use os identificadores exatos ao forçar um foco via comando.</p>
+
+      <div class="focus-grid">
+        <div class="focus-item">
+          <div class="focus-key">lower</div>
+          <div class="focus-label">Lower Body</div>
+          <div class="focus-desc">Agachamento, deadlift e variações. Squat e hinge.</div>
+        </div>
+        <div class="focus-item">
+          <div class="focus-key">upper_pull</div>
+          <div class="focus-label">Upper Pull</div>
+          <div class="focus-desc">Puxada, remada, face pull. Pull vertical e horizontal.</div>
+        </div>
+        <div class="focus-item">
+          <div class="focus-key">upper_push</div>
+          <div class="focus-label">Upper Push</div>
+          <div class="focus-desc">Supino, overhead, dips. Push horizontal e vertical.</div>
+        </div>
+        <div class="focus-item">
+          <div class="focus-key">full</div>
+          <div class="focus-label">Full Body</div>
+          <div class="focus-desc">Sessão completa com padrões de todos os grupos.</div>
+        </div>
+        <div class="focus-item">
+          <div class="focus-key">zone2</div>
+          <div class="focus-label">Zone 2</div>
+          <div class="focus-desc">Aeróbico base 50min: ciclismo, natação ou corrida.</div>
+        </div>
+        <div class="focus-item">
+          <div class="focus-key">tennis</div>
+          <div class="focus-label">Tênis</div>
+          <div class="focus-desc">Sessão de tênis. Logar com <code>/tennis min int</code>.</div>
+        </div>
+        <div class="focus-item">
+          <div class="focus-key">conditioning</div>
+          <div class="focus-label">Conditioning</div>
+          <div class="focus-desc">Circuitos e sprints de alta intensidade.</div>
+        </div>
+        <div class="focus-item">
+          <div class="focus-key">mobility</div>
+          <div class="focus-label">Mobilidade</div>
+          <div class="focus-desc">Trabalho de ROM e flexibilidade ativa.</div>
+        </div>
+        <div class="focus-item">
+          <div class="focus-key">rest</div>
+          <div class="focus-label">Descanso</div>
+          <div class="focus-desc">Dia de recuperação. Sem atividade planejada.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13 -->
+    <section class="section" id="guardrails">
+      <div class="section-marker">// 13 ──────</div>
+      <h2 class="section-title">LIMITES DO SISTEMA</h2>
+      <p class="section-intro">Guardrails de segurança que bloqueiam conteúdo médico fora do escopo. Aplicados tanto na entrada quanto na saída do LLM. Não desabilitáveis.</p>
+
+      <div class="subsection">
+        <div class="subsection-title">Termos bloqueados</div>
+        <p>Qualquer mensagem ou resposta com termos relacionados a: testosterona, cipionato, anastrozol, HCG, manipulados, doses, dosagem, prescrição, mg/dL, ng/dL e variações resulta em:</p>
+        <div class="cmd-output" style="margin:16px 0;">"Preciso pular essa, fala com a Dra. Carolina."</div>
+        <p>A sessão não encerra. Qualquer outra pergunta funciona normalmente após o bloqueio.</p>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Outros limites operacionais</div>
+        <table class="data-table">
+          <thead><tr><th>Situação</th><th>Comportamento</th></tr></thead>
+          <tbody>
+            <tr><td>Áudio &gt; 25MB</td><td>Rejeitado antes do Whisper. Na prática áudios do Telegram raramente ultrapassam 5MB.</td></tr>
+            <tr><td>Chat ID não autorizado</td><td>Silenciado. O bot não responde a nenhum outro usuário.</td></tr>
+            <tr><td>Falha do LLM</td><td>Retry automático. Se persistir: "tive um problema técnico, tenta de novo em 1min". O bot não cai.</td></tr>
+            <tr><td>Token do Calendar expirado</td><td>Sync silencioso retorna 0 eventos. Rodar <code>scripts/calendar_auth.py</code> restaura o acesso.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="divider">
+
+      <div class="corner-wrap">
+        <div class="section-marker" style="margin-bottom:16px;">// REFERÊNCIA RÁPIDA ──────</div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:28px;">
+          <div>
+            <div class="subsection-title" style="margin-bottom:12px;">Rotina diária ideal</div>
+            <div class="cmd-output" style="line-height:2.2;">
+              Manhã → /sleep &lt;h&gt; e /energy &lt;n&gt;<br>
+              Antes do treino → /plan<br>
+              Pós-treino → /log ou mensagem de voz<br>
+              Durante o dia → "bebi 500ml", "almocei..."<br>
+              Noite → se silêncio proativo, tudo bem
+            </div>
+          </div>
+          <div>
+            <div class="subsection-title" style="margin-bottom:12px;">Situações de emergência</div>
+            <div class="cmd-output" style="line-height:2.2;">
+              Muito ocupado → /quiet 48h<br>
+              Pouco tempo → "tenho 25min hoje"<br>
+              Dor → "joelho doendo, adapta o lower"<br>
+              Semana atípica → /week &lt;descrição&gt;<br>
+              Ver metas abertas → /commitments
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.2, rootMargin: '-40px 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
